@@ -1,30 +1,25 @@
 <?php
 
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-// 認証用ルート
-Auth::routes();
-
+// ホームページ
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('home');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
+// 認証が必要なルートをグループ化
 Route::middleware(['auth'])->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    // プロフィール関連
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show'); // プロフィール表示
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit'); // プロフィール編集
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update'); // プロフィール更新
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy'); // 退会機能
 });
 
-// 実際のログアウト処理
-Route::post('/logout', function () {
-    auth()->logout();
-    request()->session()->invalidate();
-    request()->session()->regenerateToken();
-    return redirect('/')->with('status', 'ログアウトしました！');
-})->name('logout');
+Route::resource('posts', PostController::class);
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+// 認証関連のルート
+require __DIR__ . '/auth.php';

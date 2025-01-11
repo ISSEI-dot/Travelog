@@ -1,18 +1,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import 'bootstrap/dist/css/bootstrap.min.css';
-
-/* 入力欄ホバーエフェクト */
-.input-hover:hover {
-    background-color: #f1f8ff;
-    border-color: #007bff;
-    transition: all 0.3s ease;
-}
-
-/* ボタンホバーエフェクト */
-.hover-effect:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-}
