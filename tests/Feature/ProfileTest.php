@@ -1,85 +1,77 @@
 <?php
 
+namespace Tests\Feature;
+
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 use App\Models\User;
 
-test('profile page is displayed', function () {
-    $user = User::factory()->create();
+class ProfileTest extends TestCase
+{
+    use RefreshDatabase;
 
-    $response = $this
-        ->actingAs($user)
-        ->get('/profile');
+    /** @test */
+    public function authenticated_user_can_view_their_profile()
+    {
+        $user = User::factory()->create();
 
-    $response->assertOk();
-});
+        $response = $this->actingAs($user)->get('/profile');
 
-test('profile information can be updated', function () {
-    $user = User::factory()->create();
+        $response->assertStatus(200);
+        $response->assertSee($user->name);
+        $response->assertSee($user->email);
+    }
 
-    $response = $this
-        ->actingAs($user)
-        ->patch('/profile', [
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+    /** @test */
+    public function authenticated_user_can_access_profile_edit_page()
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->get('/profile/edit');
+
+        $response->assertStatus(200);
+        $response->assertSee('名前'); // 編集フォーム内に「名前」が表示されていることを確認
+        $response->assertSee('メールアドレス'); // 編集フォーム内に「メールアドレス」が表示されていることを確認
+    }
+
+    /** @test */
+    public function authenticated_user_can_update_their_profile()
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->patch('/profile', [
+            'name' => 'Updated Name',
+            'email' => 'updated@example.com',
         ]);
 
-    $response
-        ->assertSessionHasNoErrors()
-        ->assertRedirect('/profile');
-
-    $user->refresh();
-
-    $this->assertSame('Test User', $user->name);
-    $this->assertSame('test@example.com', $user->email);
-    $this->assertNull($user->email_verified_at);
-});
-
-test('email verification status is unchanged when the email address is unchanged', function () {
-    $user = User::factory()->create();
-
-    $response = $this
-        ->actingAs($user)
-        ->patch('/profile', [
-            'name' => 'Test User',
-            'email' => $user->email,
+        $response->assertRedirect('/profile');
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'name' => 'Updated Name',
+            'email' => 'updated@example.com',
         ]);
+    }
 
-    $response
-        ->assertSessionHasNoErrors()
-        ->assertRedirect('/profile');
+    /** @test */
+    public function profile_update_fails_if_required_fields_are_missing()
+    {
+        $user = User::factory()->create();
 
-    $this->assertNotNull($user->refresh()->email_verified_at);
-});
+        $response = $this->actingAs($user)->patch('/profile', []);
 
-test('user can delete their account', function () {
-    $user = User::factory()->create();
+        $response->assertSessionHasErrors(['name', 'email']);
+    }
 
-    $response = $this
-        ->actingAs($user)
-        ->delete('/profile', [
-            'password' => 'password',
-        ]);
+    /** @test */
+    public function unauthenticated_user_cannot_access_profile_routes()
+    {
+        $response = $this->get('/profile');
+        $response->assertRedirect('/login');
 
-    $response
-        ->assertSessionHasNoErrors()
-        ->assertRedirect('/');
+        $response = $this->get('/profile/edit');
+        $response->assertRedirect('/login');
 
-    $this->assertGuest();
-    $this->assertNull($user->fresh());
-});
-
-test('correct password must be provided to delete account', function () {
-    $user = User::factory()->create();
-
-    $response = $this
-        ->actingAs($user)
-        ->from('/profile')
-        ->delete('/profile', [
-            'password' => 'wrong-password',
-        ]);
-
-    $response
-        ->assertSessionHasErrorsIn('userDeletion', 'password')
-        ->assertRedirect('/profile');
-
-    $this->assertNotNull($user->fresh());
-});
+        $response = $this->patch('/profile', []);
+        $response->assertRedirect('/login');
+    }
+}

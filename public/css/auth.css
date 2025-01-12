@@ -1,0 +1,308 @@
+/* --- レスポンシブ対応 --- */
+@media (max-width: 768px) {
+    .form-container {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    .btn-lg {
+        font-size: 1rem;
+        padding: 8px 16px;
+    }
+}
+
+/* --- 全体の設定 --- */
+body {
+    margin: 0;
+    padding: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+}
+
+/* --- ヘッダー設定 --- */
+.header {
+    background-color: rgba(0, 0, 0, 0.7); /* 背景を半透明に */
+    color: white; /* 文字色を白に設定 */
+    text-align: center; /* 中央揃え */
+    padding: 20px; /* パディングで余白を確保 */
+    font-size: 3rem; /* ヘッダー全体の文字サイズ調整 */
+    font-weight: bold;
+    position: sticky; /* スクロール時に固定 */
+    top: 0;
+    z-index: 1000; /* 他の要素より前面に表示 */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); /* 文字に影を付ける */
+}
+
+.header-title {
+    color: white; /* リンクの文字色 */
+    text-decoration: none; /* 下線を削除 */
+    font-size: 3rem; /* タイトルの文字サイズ */
+    font-weight: bold;
+}
+
+.header-title:hover {
+    color: #f1c40f; /* ホバー時の色をゴールドに */
+}
+
+.title {
+    font-size: 4rem; /* タイトルを大きく */
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7); /* 目立たせる影 */
+    cursor: pointer;
+    margin-top: 20px; /* 上のスペースを確保 */
+}
+
+.title:hover {
+    color: #f1c40f;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 10;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* --- 中央配置のフォーム --- */
+.main-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    text-align: center;
+}
+
+.main-content {
+    text-align: center;
+    margin-top: 100px; /* Welcome to Travelogを下に移動 */
+}
+
+/* --- Welcome to Travelog のスタイル --- */
+.main-content h1 {
+    font-size: 3.5rem; /* タイトルサイズ */
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: white; /* 文字色を白に */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* 黒いシャドウを追加 */
+    background-color: rgba(0, 0, 0, 0.5); /* 半透明の黒背景 */
+    padding: 10px 20px; /* 文字周りの余白 */
+    display: inline-block; /* 背景が文字の幅に合わせて適用される */
+    border-radius: 8px; /* 背景の角を丸くする */
+}
+
+.main-content p {
+    font-size: 1.5rem;
+    margin-bottom: 40px;
+    color: rgba(255, 255, 255, 0.9); /* 少し明るい白色 */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* シャドウで視認性を高める */
+    background-color: rgba(0, 0, 0, 0.5); /* 半透明の黒背景 */
+    padding: 10px 20px; /* 文字周りの余白 */
+    display: inline-block; /* 背景が文字の幅に合わせて適用される */
+    border-radius: 8px; /* 背景の角を丸くする */
+}
+
+
+.link-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.link-buttons a {
+    display: inline-block;
+    padding: 15px 30px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.7); /* 半透明の背景色 */
+    border-radius: 8px;
+    text-decoration: none;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.link-buttons a:hover {
+    background-color: #1e90ff; /* ホバー時の色 */
+    transform: scale(1.1); /* ホバー時の拡大効果 */
+}
+
+.form-container {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 30px;
+    border-radius: 10px;
+    max-width: 400px;
+    margin: 50px auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.form-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+}
+
+.auth-form .form-group {
+    margin-bottom: 20px;
+}
+
+.auth-form label {
+    font-size: 1rem;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.auth-form input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    margin-top: 5px;
+}
+
+.auth-form button.auth-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.auth-form button.auth-button:hover {
+    background-color: #357ab9;
+}
+
+.btn {
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: #4a90e2;
+    color: #fff;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #357ab9;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: #fff;
+    border: none;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* --- 全体のスタイル --- */
+.container {
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+/* --- カードの調整 --- */
+.card {
+    border: none;
+    border-radius: 10px;
+}
+
+.card .card-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.card .btn {
+    padding: 10px 20px;
+    font-size: 1rem;
+}
+
+/* --- ボタンのホバー効果 --- */
+.btn-primary:hover {
+    background-color: #357ab9;
+    color: #fff;
+}
+
+.btn-warning:hover {
+    background-color: #e3a207;
+    color: #fff;
+}
+
+.btn-success:hover {
+    background-color: #58d68d;
+    color: #fff;
+}
+
+/* --- テキスト中央揃え --- */
+.text-center {
+    text-align: center;
+}
+
+/* メール確認ページ用スタイル */
+.success-message {
+    background-color: rgba(46, 204, 113, 0.2);
+    color: #27ae60;
+    padding: 10px 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.logout-form {
+    text-align: center;
+}
+
+.logout-button {
+    background-color: rgba(231, 76, 60, 0.9);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+    background-color: #e74c3c;
+}
+
+.form-text {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+    line-height: 1.6;
+}

@@ -1,25 +1,29 @@
-<x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600">
-        {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
-    </div>
+@extends('layouts.app')
 
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+@section('content')
+<div class="form-container">
+    <h2 class="form-title">パスワードをお忘れですか？</h2>
+    <p class="form-description">
+        ご登録いただいたメールアドレスを入力してください。<br>
+        パスワードリセットリンクを送信します。
+    </p>
 
-    <form method="POST" action="{{ route('password.email') }}">
+    @if (session('status'))
+        <div class="alert alert-success" role="alert">
+            {{ session('status') }}
+        </div>
+    @endif
+
+    <form method="POST" action="{{ route('password.email') }}" class="auth-form">
         @csrf
-
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+        <div class="form-group">
+            <label for="email">メールアドレス</label>
+            <input id="email" type="email" name="email" value="{{ old('email') }}" placeholder="例: example@example.com" required autofocus>
         </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Email Password Reset Link') }}
-            </x-primary-button>
-        </div>
+        <button type="submit" class="auth-button">リセットリンクを送信</button>
     </form>
-</x-guest-layout>
+    <p class="form-footer">
+        <a href="{{ route('login') }}">ログイン画面に戻る</a>
+    </p>
+</div>
+@endsection

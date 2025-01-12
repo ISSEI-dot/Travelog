@@ -22,7 +22,9 @@ class ProfileController extends Controller
     // マイページを表示
     public function edit()
     {
-        return view('profile.edit', ['user' => Auth::user()]);
+        $user = auth()->user(); // 現在ログイン中のユーザー情報を取得
+
+        return view('profile.edit', compact('user')); // ビューにユーザー情報を渡す
     }
 
     // 会員情報を更新
@@ -36,7 +38,7 @@ class ProfileController extends Controller
         $user = Auth::user();
         $user->update($request->only('name', 'email'));
 
-        return redirect()->route('profile.edit')->with('status', 'プロフィールを更新しました！');
+        return redirect('/profile')->with('status', 'プロフィールを更新しました！');
     }
 
     // 退会処理

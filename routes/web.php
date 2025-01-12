@@ -11,6 +11,11 @@ Route::get('/', function () {
 
 // 認証が必要なルートをグループ化
 Route::middleware(['auth'])->group(function () {
+    // ダッシュボード
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+
     // プロフィール関連
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show'); // プロフィール表示
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit'); // プロフィール編集
@@ -18,8 +23,8 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy'); // 退会機能
 });
 
+// 投稿関連のリソースルート
 Route::resource('posts', PostController::class);
-
 
 // 認証関連のルート
 require __DIR__ . '/auth.php';
