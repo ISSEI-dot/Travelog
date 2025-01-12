@@ -3,6 +3,9 @@
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CompanyController;
+
+Route::get('/company-info', [CompanyController::class, 'index'])->name('company.info');
 
 // ホームページ
 Route::get('/', function () {

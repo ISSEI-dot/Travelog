@@ -14,6 +14,20 @@
     }
 }
 
+.company-info {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    line-height: 1.8;
+    font-size: 1.2rem;
+}
+
+.company-info strong {
+    color: #4a47a3;
+}
+
+
 /* --- 全体の設定 --- */
 body {
     margin: 0;
@@ -26,27 +40,33 @@ body {
 
 /* --- ヘッダー設定 --- */
 .header {
-    background-color: rgba(0, 0, 0, 0.7); /* 背景を半透明に */
-    color: white; /* 文字色を白に設定 */
-    text-align: center; /* 中央揃え */
-    padding: 20px; /* パディングで余白を確保 */
-    font-size: 3rem; /* ヘッダー全体の文字サイズ調整 */
-    font-weight: bold;
-    position: sticky; /* スクロール時に固定 */
+    background-color: rgba(0, 0, 0, 0.7); /* 半透明の背景色 */
+    color: white;
+    padding: 10px 20px;
+    position: sticky;
     top: 0;
-    z-index: 1000; /* 他の要素より前面に表示 */
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); /* 文字に影を付ける */
+    z-index: 1000;
 }
 
 .header-title {
-    color: white; /* リンクの文字色 */
-    text-decoration: none; /* 下線を削除 */
-    font-size: 3rem; /* タイトルの文字サイズ */
+    font-size: 1.5rem;
     font-weight: bold;
+    text-decoration: none;
+    color: white;
 }
 
 .header-title:hover {
-    color: #f1c40f; /* ホバー時の色をゴールドに */
+    color: #f1c40f;
+}
+
+.header-buttons .btn {
+    margin-left: 10px;
+    font-size: 0.9rem;
+}
+
+.header-buttons .btn:hover {
+    background-color: #1e90ff;
+    color: white;
 }
 
 .title {
