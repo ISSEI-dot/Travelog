@@ -5,8 +5,6 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CompanyController;
 
-Route::get('/company-info', [CompanyController::class, 'index'])->name('company.info');
-
 // ホームページ
 Route::get('/', function () {
     return view('welcome');
@@ -24,10 +22,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit'); // プロフィール編集
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update'); // プロフィール更新
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy'); // 退会機能
+    
+    // 投稿関連のリソースルート
+    Route::resource('posts', PostController::class);
+
 });
 
-// 投稿関連のリソースルート
-Route::resource('posts', PostController::class);
+Route::get('/company-info', [CompanyController::class, 'index'])->name('company.info');
 
 // 認証関連のルート
 require __DIR__ . '/auth.php';
