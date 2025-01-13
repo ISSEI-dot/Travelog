@@ -13,6 +13,13 @@ class PostController extends Controller
             return view('posts.index', compact('posts'));
     }
 
+    public function dashboard()
+    {
+        $posts = Post::latest()->paginate(20); // 投稿を最新順で20件取得
+            return view('dashboard', compact('posts')); // dashboardビューにデータを渡す
+    }
+
+
     public function create()
     {
         return view('posts.create'); // 投稿作成ビュー

@@ -326,3 +326,15 @@ footer {
     text-align: center;
     line-height: 1.6;
 }
+
+.card {
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.card-img-top {
+    width: 100%;
+    height: 200px; /* 必要に応じて調整 */
+    object-fit: cover;
+}

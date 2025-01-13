@@ -12,29 +12,24 @@
     <link rel="stylesheet" href="{{ asset('css/auth.css') }}">
 </head>
 <body>
-    <header class="header d-flex justify-content-between align-items-center px-3">
-        <!-- 左側のタイトル -->
+    <header class="header">
         <a href="{{ url('/') }}" class="header-title">Travelog</a>
-        
-        <!-- 右側のボタン -->
         @auth
-        <div class="header-buttons d-flex">
-            <!-- ログアウトボタン -->
-            <form method="POST" action="{{ route('logout') }}" class="me-2">
-                @csrf
-                <button type="submit" class="btn btn-outline-light">ログアウト</button>
-            </form>
-
-            <!-- 会社情報ボタン -->
-            <a href="{{ route('company.info') }}" class="btn btn-outline-light">会社情報</a>
-        </div>
+            <div class="d-flex justify-content-end align-items-center">
+                <a href="{{ route('logout') }}" class="btn btn-outline-light me-2"
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    ログアウト
+                </a>
+                <a href="{{ route('company.info') }}" class="btn btn-outline-light">会社情報</a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                    @csrf
+                </form>
+            </div>
         @endauth
     </header>
-
     <main>
         @yield('content')
     </main>
-    
     <footer class="footer">
         Travelog © 2025 - 旅行記録アプリ
     </footer>

@@ -2,53 +2,59 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProfileUpdateRequest;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
-    public function show()
+    /**
+     * Display the user's profile form.
+     */
+    public function edit(Request $request): View
     {
-        if (auth()->check()) {
-            $user = auth()->user();
-            return view('profile.show', compact('user'));
-        } else {
-        return redirect()->route('login')->with('error', 'ログインしてください。');
+        return view('profile.edit', [
+            'user' => $request->user(),
+        ]);
+    }
+
+    /**
+     * Update the user's profile information.
+     */
+    public function update(ProfileUpdateRequest $request): RedirectResponse
+    {
+        $request->user()->fill($request->validated());
+
+        if ($request->user()->isDirty('email')) {
+            $request->user()->email_verified_at = null;
         }
+
+        $request->user()->save();
+
+        return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
-
-    // マイページを表示
-    public function edit()
+    /**
+     * Delete the user's account.
+     */
+    public function destroy(Request $request): RedirectResponse
     {
-        $user = auth()->user(); // 現在ログイン中のユーザー情報を取得
-
-        return view('profile.edit', compact('user')); // ビューにユーザー情報を渡す
-    }
-
-    // 会員情報を更新
-    public function update(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users,email,' . Auth::id(),
+        $request->validateWithBag('userDeletion', [
+            'password' => ['required', 'current_password'],
         ]);
 
-        $user = Auth::user();
-        $user->update($request->only('name', 'email'));
-
-        return redirect('/profile')->with('status', 'プロフィールを更新しました！');
-    }
-
-    // 退会処理
-    public function destroy(Request $request)
-    {
-        $user = Auth::user();
-        $user->delete();
+        $user = $request->user();
 
         Auth::logout();
 
-        return redirect('/')->with('status', 'アカウントを削除しました。');
+        $user->delete();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return Redirect::to('/');
     }
 }

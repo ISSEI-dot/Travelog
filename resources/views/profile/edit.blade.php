@@ -1,31 +1,29 @@
 <x-app-layout>
-    <div class="container mt-5 p-4 bg-white shadow rounded">
-        <h2 class="text-center mb-4" style="color: #4a47a3; font-weight: bold;">プロフィール編集</h2>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Profile') }}
+        </h2>
+    </x-slot>
 
-        <form method="POST" action="{{ route('profile.update') }}">
-            @csrf
-            @method('PATCH')
-
-            <div class="mb-3">
-                <label for="name" class="form-label">名前</label>
-                <input type="text" id="name" name="name" class="form-control" value="{{ old('name', $user->name) }}" required>
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+                <div class="max-w-xl">
+                    @include('profile.partials.update-profile-information-form')
+                </div>
             </div>
 
-            <div class="mb-3">
-                <label for="email" class="form-label">メールアドレス</label>
-                <input type="email" id="email" name="email" class="form-control" value="{{ old('email', $user->email) }}" required>
+            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+                <div class="max-w-xl">
+                    @include('profile.partials.update-password-form')
+                </div>
             </div>
 
-            <button type="submit" class="btn btn-primary">更新</button>
-        </form>
-
-        <hr class="my-4">
-
-        <form method="POST" action="{{ route('profile.destroy') }}">
-            @csrf
-            @method('DELETE')
-
-            <button type="submit" class="btn btn-danger">退会する</button>
-        </form>
+            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+                <div class="max-w-xl">
+                    @include('profile.partials.delete-user-form')
+                </div>
+            </div>
+        </div>
     </div>
 </x-app-layout>

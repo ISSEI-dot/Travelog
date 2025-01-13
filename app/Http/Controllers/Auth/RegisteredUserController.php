@@ -17,7 +17,7 @@ class RegisteredUserController extends Controller
     /**
      * Display the registration view.
      */
-    public function create()
+    public function create(): View
     {
         return view('auth.register');
     }
@@ -45,7 +45,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('dashboard'); // 'home' にリダイレクト
-
+        return redirect('/verify-email');
     }
 }

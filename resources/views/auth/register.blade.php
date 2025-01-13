@@ -3,6 +3,7 @@
 @section('content')
 <div class="form-container">
     <h2 class="form-title">新規登録</h2>
+
     <form method="POST" action="{{ route('register') }}" class="auth-form">
         @csrf
         <div class="form-group">

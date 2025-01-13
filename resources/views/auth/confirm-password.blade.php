@@ -4,7 +4,7 @@
 <div class="form-container">
     <h2 class="form-title">パスワード確認</h2>
     <p class="form-description">
-        アプリケーションの安全なエリアにアクセスするために、パスワードを確認してください。
+        この操作を続けるには、パスワードを確認してください。
     </p>
 
     @if ($errors->any())
@@ -19,17 +19,11 @@
 
     <form method="POST" action="{{ route('password.confirm') }}" class="auth-form">
         @csrf
-
-        <!-- Password -->
         <div class="form-group">
             <label for="password">パスワード</label>
-            <input id="password" type="password" name="password" placeholder="パスワードを入力" required autofocus>
+            <input id="password" type="password" name="password" placeholder="パスワードを入力" required autocomplete="current-password">
         </div>
-
-        <button type="submit" class="auth-button">確認する</button>
+        <button type="submit" class="auth-button">確認</button>
     </form>
-    <p class="form-footer">
-        <a href="{{ route('login') }}">ログイン画面に戻る</a>
-    </p>
 </div>
 @endsection

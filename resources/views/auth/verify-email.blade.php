@@ -3,28 +3,19 @@
 @section('content')
 <div class="form-container">
     <h2 class="form-title">メールアドレスの確認</h2>
-    <p class="form-description">
-        登録ありがとうございます！メールアドレスの確認が完了していません。確認用リンクをメールで送信しました。メールをご確認のうえ、リンクをクリックしてください。
-    </p>
 
     @if (session('status') == 'verification-link-sent')
-        <div class="success-message">
-            <p>
-                新しい確認リンクが登録されたメールアドレスに送信されました。
-            </p>
-        </div>
+        <p class="alert alert-success">
+            新しい確認リンクが登録済みメールアドレスに送信されました。
+        </p>
     @endif
 
-    <form method="POST" action="{{ route('verification.send') }}" class="auth-form">
-        @csrf
-        <button type="submit" class="auth-button">確認メールを再送信</button>
-    </form>
+    <p>続行する前に、メールアドレス確認用リンクが記載されたメールを確認してください。</p>
+    <p>もしメールが届いていない場合は、以下のリンクをクリックしてください。</p>
 
-    <form method="POST" action="{{ route('logout') }}" class="logout-form mt-4">
+    <form method="POST" action="{{ route('verification.send') }}">
         @csrf
-        <button type="submit" class="logout-button">
-            ログアウト
-        </button>
+        <button type="submit" class="auth-button">確認メールを再送する</button>
     </form>
 </div>
 @endsection
