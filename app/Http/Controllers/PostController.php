@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\PostImage;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -10,15 +11,8 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::latest()->paginate(10); // 投稿を最新順で取得
-            return view('posts.index', compact('posts'));
+        return view('posts.index', compact('posts'));
     }
-
-    public function dashboard()
-    {
-        $posts = Post::latest()->paginate(20); // 投稿を最新順で20件取得
-            return view('dashboard', compact('posts')); // dashboardビューにデータを渡す
-    }
-
 
     public function create()
     {
@@ -27,67 +21,101 @@ class PostController extends Controller
 
     public function store(Request $request)
     {
-        // 投稿保存処理
+        // バリデーション
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'image' => 'nullable|image|max:2048', // 画像は任意
-            'location' => 'nullable|string|max:255',
+            'images.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // 複数画像対応
         ]);
-    
-        $post = new Post();
-        $post->title = $request->title;
-        $post->description = $request->description;
-        $post->location = $request->location;
-        $post->user_id = auth()->id();
-    
-        if ($request->hasFile('image')) {
-            $post->image = $request->file('image')->store('posts', 'public'); // publicディスクに保存
+
+        // 投稿を保存
+        $post = Post::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'user_id' => auth()->id(),
+        ]);
+
+        // 画像を保存
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $path = $image->store('images', 'public');
+                $post->images()->create(['image_path' => $path]);
+            }
         }
-    
-        $post->save();
-    
-        return redirect()->route('posts.index')->with('success', '投稿を作成しました。');
+
+        return redirect()->route('posts.index')->with('success', '投稿が作成されました！');
     }
 
     public function show(Post $post)
     {
-        return view('posts.show',compact('post')); // 投稿詳細ビュー
+        return view('posts.show', compact('post')); // 投稿詳細ビュー
     }
 
     public function edit(Post $post)
     {
-        return view('posts.edit',compact('post')); // 投稿編集ビュー
+        return view('posts.edit', compact('post')); // 投稿編集ビュー
     }
 
     public function update(Request $request, Post $post)
     {
-        // 投稿更新処理
+
+        // ログインユーザーが投稿者か確認
+        if (auth()->id() !== $post->user_id) {
+            abort(403, '権限がありません。');
+        }
+
+        // バリデーション
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'image' => 'nullable|image|max:2048',
-            'location' => 'nullable|string|max:255',
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // 複数画像対応
         ]);
-    
-        $post->title = $request->title;
-        $post->description = $request->description;
-        $post->location = $request->location;
-    
-        if ($request->hasFile('image')) {
-            $post->image = $request->file('image')->store('posts', 'public');
+
+        // 投稿情報の更新
+        $post->update([
+            'title' => $request->title,
+            'description' => $request->description,
+        ]);
+
+        // 新しい画像を保存
+        if ($request->hasFile('images')) {
+            foreach ($post->images as $image) {
+                \Storage::disk('public')->delete($image->image_path);
+                $image->delete();
+            }
+            foreach ($request->file('images') as $image) {
+                $path = $image->store('images', 'public');
+                $post->images()->create(['image_path' => $path]);
+            }
         }
-    
-        $post->save();
-    
-        return redirect()->route('posts.index')->with('success', '投稿を更新しました。');
+
+        return redirect()->route('posts.show', $post->id)->with('success', '投稿が更新されました！');
     }
 
     public function destroy(Post $post)
     {
-        // 投稿削除処理
+        // ログインユーザーが投稿者か確認
+        if (auth()->id() !== $post->user_id) {
+            abort(403, '権限がありません。');
+        }
+
+        // 画像を削除
+        foreach ($post->images as $image) {
+            \Storage::disk('public')->delete($image->image_path);
+            $image->delete();
+        }
+
         $post->delete();
 
-    return redirect()->route('posts.index')->with('success', '投稿を削除しました。');
+        return redirect()->route('posts.index')->with('success', '投稿が削除されました！');
     }
+
+    public function dashboard()
+    {
+        // 投稿画像を取得（最新順）
+        $images = PostImage::inRandomOrder()->get();
+
+        return view('dashboard', compact('images'));
+    }
+
 }
