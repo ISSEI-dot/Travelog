@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container py-5">
-    <h2 class="text-center mb-4">ダッシュボード</h2>
+<div class="container py-5 text-center">
+    <h1 class="title">ダッシュボード</h1>
     <div class="photo-gallery position-relative">
         @foreach ($images as $image)
             <div class="photo-item position-absolute">
@@ -23,7 +23,7 @@
         overflow: hidden;
         border: 1px solid #ddd;
         border-radius: 10px;
-        background: #f9f9f9;
+        background: lightyellow;
     }
 
     /* 各写真のスタイル */
@@ -51,13 +51,30 @@
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const photoItems = document.querySelectorAll('.photo-item');
+        const galleryWidth = document.querySelector('.photo-gallery').clientWidth;
+        const galleryHeight = document.querySelector('.photo-gallery').clientHeight;
+        const occupiedPositions = []; // 使用された位置を記録
 
         photoItems.forEach(item => {
-            const randomX = Math.random() * 80 - 40; // X方向 -40% ~ +40% のランダム値
-            const randomY = Math.random() * 80 - 40; // Y方向 -40% ~ +40% のランダム値
-            const randomRotation = Math.random() * 30 - 15; // 回転 -15deg ~ +15deg のランダム値
+            let isOverlapping = true;
+            let randomX, randomY;
 
-            item.style.transform = `translate(${randomX}%, ${randomY}%) rotate(${randomRotation}deg)`;
+            while (isOverlapping) {
+                randomX = Math.random() * (galleryWidth - 150); // 150pxは写真の幅
+                randomY = Math.random() * (galleryHeight - 150); // 150pxは写真の高さ
+                isOverlapping = occupiedPositions.some(pos => {
+                    const distance = Math.sqrt(
+                        Math.pow(pos.x - randomX, 2) + Math.pow(pos.y - randomY, 2)
+                    );
+                    return distance < 180; // 写真同士の最小間隔（ピクセル単位）
+                });
+            }
+
+            occupiedPositions.push({ x: randomX, y: randomY });
+
+            const randomRotation = Math.random() * 20 - 10; // 回転 -10deg ~ +10deg のランダム値
+
+            item.style.transform = `translate(${randomX}px, ${randomY}px) rotate(${randomRotation}deg)`;
             item.style.zIndex = Math.floor(Math.random() * 10); // Z軸のランダム値
         });
     });

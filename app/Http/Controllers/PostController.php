@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\PostImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+
+
 
 class PostController extends Controller
 {
@@ -25,14 +29,14 @@ class PostController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'images.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // 複数画像対応
+            'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:30000', // 複数画像対応
         ]);
 
         // 投稿を保存
         $post = Post::create([
             'title' => $request->title,
             'description' => $request->description,
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(),
         ]);
 
         // 画像を保存
@@ -60,7 +64,7 @@ class PostController extends Controller
     {
 
         // ログインユーザーが投稿者か確認
-        if (auth()->id() !== $post->user_id) {
+        if (Auth::id() !== $post->user_id) {
             abort(403, '権限がありません。');
         }
 
@@ -80,7 +84,7 @@ class PostController extends Controller
         // 新しい画像を保存
         if ($request->hasFile('images')) {
             foreach ($post->images as $image) {
-                \Storage::disk('public')->delete($image->image_path);
+                Storage::disk('public')->delete($image->image_path);
                 $image->delete();
             }
             foreach ($request->file('images') as $image) {
@@ -95,13 +99,13 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         // ログインユーザーが投稿者か確認
-        if (auth()->id() !== $post->user_id) {
+        if (Auth::id() !== $post->user_id) {
             abort(403, '権限がありません。');
         }
 
         // 画像を削除
         foreach ($post->images as $image) {
-            \Storage::disk('public')->delete($image->image_path);
+            Storage::disk('public')->delete($image->image_path);
             $image->delete();
         }
 
@@ -113,7 +117,7 @@ class PostController extends Controller
     public function dashboard()
     {
         // 投稿画像を取得（最新順）
-        $images = PostImage::inRandomOrder()->get();
+        $images = PostImage::inRandomOrder()->limit(30)->get();
 
         return view('dashboard', compact('images'));
     }

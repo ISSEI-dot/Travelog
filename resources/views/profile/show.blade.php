@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container py-5">
-    <h2 class="text-center font-weight-bold mb-4">マイページ</h2>
+    <h1 class="title text-center">マイページ</h1>
 
     <div class="row g-4">
         <!-- プロフィール情報のカード -->
