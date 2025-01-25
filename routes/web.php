@@ -4,6 +4,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CompanyController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ReviewController;
 
 // ホームページ
 Route::get('/', function () {
@@ -29,6 +30,10 @@ Route::middleware(['auth'])->group(function () {
 
     // 投稿関連のリソースルート
     Route::resource('posts', PostController::class);
+
+    Route::post('/posts/{post}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+    Route::delete('/posts/{post}/reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
+
 });
 
 // 認証関連のルート
