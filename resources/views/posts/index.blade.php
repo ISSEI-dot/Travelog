@@ -13,6 +13,23 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ $post->title }}</h5>
                     <p class="card-text">{{ Str::limit($post->description, 100) }}</p>
+                    
+                    <!-- 平均評価を表示 -->
+                    @if ($post->averageRating > 0)
+                        <div class="mb-2">
+                            <span class="text-warning fw-bold">{{ $post->averageRating }}</span>
+                            @for ($i = 1; $i <= 5; $i++)
+                                @if ($i <= $post->averageRating)
+                                    <span class="text-warning">★</span>
+                                @else
+                                    <span class="text-secondary">☆</span>
+                                @endif
+                            @endfor
+                        </div>
+                    @else
+                        <p class="text-muted">評価なし</p>
+                    @endif
+
                     <a href="{{ route('posts.show', $post) }}" class="btn btn-primary">詳細を見る</a>
                 </div>
             </div>

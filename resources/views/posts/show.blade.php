@@ -43,9 +43,9 @@
 
             @auth
                 @if (auth()->id() === $post->user_id)
-                <div class="mt-4 d-flex justify-content-between">
+                <div class="mt-4 d-flex justify-content-end">
                     <!-- 編集ボタン -->
-                    <a href="{{ route('posts.edit', $post->id) }}" class="btn btn-light px-4 py-2">編集</a>
+                    <a href="{{ route('posts.edit', $post->id) }}" class="btn btn-light px-4 py-2 me-2">編集</a>
 
                     <!-- 削除ボタン -->
                     <form method="POST" action="{{ route('posts.destroy', $post->id) }}" class="form-bg">
@@ -59,72 +59,85 @@
         </div>
     </div>
 
-    <!-- レビューセクション -->
-    <div class="mt-5">
-        <h3 class="mb-4 text-xl font-semibold text-white">レビュー一覧</h3>
-        <div class="card shadow border-0 form-bg">
-            <div class="card-body p-4">
-                @if ($post->reviews->isNotEmpty())
-                    @foreach ($post->reviews as $review)
-                        <div class="mb-4 p-3 bg-transparent border-bottom border-gray-700">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <p class="mb-0 font-semibold text-white">{{ $review->user->name }}</p>
-                                <div>
-                                    @for ($i = 1; $i <= 5; $i++)
-                                        @if ($i <= $review->rating)
-                                            <span class="text-yellow-400 text-md">★</span>
-                                        @else
-                                            <span class="text-gray-500 text-md">☆</span>
-                                        @endif
-                                    @endfor
-                                </div>
-                            </div>
-                            <p class="mt-2 text-white">{{ $review->content }}</p>
-                            <small class="text-gray-400">{{ $review->created_at->diffForHumans() }}</small>
-
-                            <!-- レビュー削除ボタン -->
-                            @auth
-                                @if (auth()->id() === $review->user_id)
-                                    <form method="POST" action="{{ route('reviews.destroy', [$post->id, $review->id]) }}" class="mt-2 form-bg">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('このレビューを削除しますか？')">削除</button>
-                                    </form>
-                                @endif
-                            @endauth
-                        </div>
-                    @endforeach
-                @else
-                    <p class="text-gray-400">まだレビューがありません。</p>
-                @endif
-            </div>
-        </div>
-
-        <!-- レビューフォーム -->
-        @auth
-            <form method="POST" action="{{ route('reviews.store', $post->id) }}" class="mt-4 p-4 shadow form-bg">
-                @csrf
-                <h4 class="text-lg font-semibold text-gray-100 mb-3">レビューを投稿する</h4>
-                <div class="mb-3">
-                    <label for="rating" class="form-label text-gray-300">評価（1〜5）</label>
-                    <select name="rating" id="rating" class="form-select text-gray-700" required>
-                        <option value="5">★★★★★</option>
-                        <option value="4">★★★★☆</option>
-                        <option value="3">★★★☆☆</option>
-                        <option value="2">★★☆☆☆</option>
-                        <option value="1">★☆☆☆☆</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label for="content" class="form-label text-gray-300">レビュー内容</label>
-                    <textarea name="content" id="content" class="form-control text-gray-700" rows="3" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">送信</button>
-            </form>
-        @else
-            <p class="mt-4 text-white">レビューを投稿するには <a href="{{ route('login') }}" class="text-yellow-400 underline">ログイン</a> が必要です。</p>
-        @endauth
+    <!-- レビュー投稿へのスクロールボタン -->
+    <div class="text-center mb-4">
+        <a href="#review-form" class="btn btn-primary">レビューを投稿する</a>
     </div>
+
+    <!-- レビューセクション -->
+<div class="mt-5">
+    <!-- レビューリスト -->
+    <div class="card shadow border-0 form-bg">
+        <div class="card-body p-4">
+            <!-- レビュー一覧タイトル -->
+            <h3 class="mb-4 text-xl font-semibold text-white">レビュー一覧</h3>
+            
+            @if ($reviews->isNotEmpty())
+                @foreach ($reviews as $review)
+                    <div class="mb-4 p-3 bg-transparent border-bottom border-gray-700">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <p class="mb-0 font-semibold text-white">{{ $review->user->name }}</p>
+                            <div>
+                                @for ($i = 1; $i <= 5; $i++)
+                                    @if ($i <= $review->rating)
+                                        <span class="text-yellow-400 text-md">★</span>
+                                    @else
+                                        <span class="text-gray-500 text-md">☆</span>
+                                    @endif
+                                @endfor
+                            </div>
+                        </div>
+                        <p class="mt-2 text-white">{{ $review->content }}</p>
+                        <small class="text-white">{{ $review->created_at->diffForHumans() }}</small>
+
+                        <!-- レビュー削除ボタン -->
+                        @auth
+                            @if (auth()->id() === $review->user_id)
+                                <form method="POST" action="{{ route('reviews.destroy', [$post->id, $review->id]) }}" class="mt-2 d-flex justify-content-end">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('このレビューを削除しますか？')">削除</button>
+                                </form>
+                            @endif
+                        @endauth
+                    </div>
+                @endforeach
+                <!-- ページネーション -->
+                <div class="d-flex justify-content-center mt-4">
+                    {{ $reviews->links() }}
+                </div>
+            @else
+                <p class="text-gray-400">まだレビューがありません。</p>
+            @endif
+        </div>
+    </div>
+
+    <!-- レビューフォーム -->
+    @auth
+        <form id="review-form" method="POST" action="{{ route('reviews.store', $post->id) }}" class="mt-4 p-4 shadow form-bg">
+            @csrf
+            <h4 class="text-lg font-semibold text-white mb-3">レビューを投稿する</h4>
+            <div class="mb-3">
+                <label for="rating" class="form-label text-white">評価（1〜5）</label>
+                <select name="rating" id="rating" class="form-select text-gray-700" required>
+                    <option value="5">★★★★★</option>
+                    <option value="4">★★★★☆</option>
+                    <option value="3">★★★☆☆</option>
+                    <option value="2">★★☆☆☆</option>
+                    <option value="1">★☆☆☆☆</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="content" class="form-label text-white">レビュー内容</label>
+                <textarea name="content" id="content" class="form-control text-gray-700" rows="3" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary d-flex justify-content-end">送信</button>
+        </form>
+    @else
+        <p class="mt-4 text-white">レビューを投稿するには <a href="{{ route('login') }}" class="text-yellow-400 underline">ログイン</a> が必要です。</p>
+    @endauth
+</div>
+
 </div>
 
 <style>

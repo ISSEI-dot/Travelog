@@ -25,17 +25,17 @@ class ReviewController extends Controller
     }
 
     public function destroy($postId, $reviewId)
-{
-    $review = Review::findOrFail($reviewId);
+    {
+        $review = Review::findOrFail($reviewId);
 
-    // ログインユーザーがレビュー投稿者か確認
-    if (auth()->id() !== $review->user_id) {
+        // ログインユーザーがレビュー投稿者か確認
+        if (auth()->id() !== $review->user_id) {
         abort(403, '権限がありません。');
+        }
+
+        $review->delete();
+
+     return redirect()->route('posts.show', $postId)->with('success', 'レビューを削除しました。');
     }
-
-    $review->delete();
-
-    return redirect()->route('posts.show', $postId)->with('success', 'レビューを削除しました。');
-}
 
 }

@@ -12,9 +12,18 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::latest()->paginate(10); // 投稿を最新順で取得
+        // ページネーションで投稿を取得
+        $posts = Post::with('reviews')->latest()->paginate(10);
+
+        // 平均評価を計算
+        $posts->getCollection()->transform(function ($post) {
+            $post->averageRating = round($post->reviews->avg('rating'), 1) ?? 0;
+            return $post;
+        });
+
         return view('posts.index', compact('posts'));
     }
+
 
     public function create()
     {
@@ -50,8 +59,13 @@ class PostController extends Controller
 
     public function show(Post $post)
     {
-        return view('posts.show', compact('post')); // 投稿詳細ビュー
+    // レビューを最新順で取得し、5件ごとにページネーション
+    $reviews = $post->reviews()->latest()->paginate(5);
+
+    // ビューに投稿とレビューを渡す
+    return view('posts.show', compact('post', 'reviews'));
     }
+
 
     public function edit(Post $post)
     {

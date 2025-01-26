@@ -292,3 +292,33 @@ footer {
     color: #4a47a3; /* 強調部分の色 */
     font-size: 1.3rem; /* 強調部分のフォントサイズ */
 }
+
+/* スターのスタイルを黄色に変更 */
+.text-yellow-400 {
+    color: gold !important; /* スターの色をゴールド（黄色）に設定 */
+}
+
+.text-gray-500 {
+    color: rgba(200, 200, 200, 1); /* 空のスターの色を調整 */
+}
+
+.text-md {
+    font-size: 1.2rem; /* スターのサイズを調整（必要に応じて変更可能） */
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.page-item .page-link {
+    color: #fff; /* ボタンのテキスト色 */
+    background-color: rgba(0, 0, 0, 0.5); /* ボタンの背景色 */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* ボタンの枠線 */
+}
+
+.page-item .page-link:hover {
+    background-color: #ffc107; /* ボタンのホバー時の背景色 */
+    color: #000; /* ホバー時のテキスト色 */
+}
