@@ -35,7 +35,7 @@
                 <div class="row mt-4 g-3">
                     @foreach($post->images as $image)
                         <div class="col-md-4">
-                            <img src="{{ asset('storage/' . $image->image_path) }}" class="img-fluid rounded shadow" alt="投稿画像">
+                            <img src="{{ asset('images/' . $image->image_path) }}" class="img-fluid rounded shadow" alt="投稿画像">
                         </div>
                     @endforeach
                 </div>

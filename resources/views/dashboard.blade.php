@@ -7,7 +7,7 @@
         @foreach ($images as $image)
             <div class="photo-item position-absolute">
                 <a href="{{ route('posts.show', $image->post_id) }}">
-                    <img src="{{ asset('storage/' . $image->image_path) }}" alt="投稿画像">
+                    <img src="{{ asset('images/' . $image->image_path) }}" alt="投稿画像">
                 </a>
             </div>
         @endforeach

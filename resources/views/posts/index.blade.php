@@ -8,7 +8,7 @@
         <div class="col-md-4 mb-4">
             <div class="card">
                 @if ($post->images->count() > 0)
-                <img src="{{ asset('storage/' . $post->images->first()->image_path) }}" class="card-img-top" alt="投稿画像">
+                <img src="{{ asset('images/' . $post->images->first()->image_path) }}" class="card-img-top" alt="投稿画像">
                 @endif
                 <div class="card-body">
                     <h5 class="card-title">{{ $post->title }}</h5>
