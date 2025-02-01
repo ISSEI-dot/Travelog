@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CompanyController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\MapController;
 
 // ホームページ
 Route::get('/', function () {
@@ -33,6 +34,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/posts/{post}/reviews', [ReviewController::class, 'store'])->name('reviews.store');
     Route::delete('/posts/{post}/reviews/{review}', [ReviewController::class, 'destroy'])->name('reviews.destroy');
+
+    Route::get('/map', [MapController::class, 'index'])->name('map');
 
 });
 

@@ -36,6 +36,9 @@ class PostController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
+            'location' => 'nullable|string|max:255',
+            'latitude' => 'nullable|numeric',
+            'longitude' => 'nullable|numeric',
             'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:30000', // 複数画像対応
         ]);
 
@@ -43,6 +46,9 @@ class PostController extends Controller
         $post = Post::create([
             'title' => $request->title,
             'description' => $request->description,
+            'location' => $request->location, 
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
             'user_id' => Auth::id(),
         ]);
 
@@ -84,6 +90,8 @@ class PostController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
+            'latitude' => 'nullable|numeric',
+            'longitude' => 'nullable|numeric',
             'images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // 複数画像対応
         ]);
 
@@ -91,6 +99,8 @@ class PostController extends Controller
         $post->update([
             'title' => $request->title,
             'description' => $request->description,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
         ]);
 
         // 新しい画像を保存

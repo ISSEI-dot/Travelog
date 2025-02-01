@@ -13,6 +13,9 @@ class Post extends Model
         'title',
         'description',
         'user_id',
+        'location',
+        'latitude',
+        'longitude'
     ];
 
     public function images()
