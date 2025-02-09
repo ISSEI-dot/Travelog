@@ -22,6 +22,13 @@
                     <textarea name="description" id="description" class="form-control text-dark" rows="5" required></textarea>
                 </div>
 
+                <!-- 画像アップロード -->
+                <div class="mb-4">
+                    <label for="images" class="form-label text-white fw-bold">画像をアップロード</label>
+                    <input type="file" name="images[]" id="images" class="form-control text-dark" multiple required>
+                    <small class="text-light">※複数の画像を選択できます</small>
+                </div>
+
                 <!-- 観光地検索ボックス -->
                 <div class="mb-4 d-flex">
                     <input type="text" id="location-search" class="form-control text-dark me-2" placeholder="例: 東京タワー, 京都, 大阪城">
@@ -48,6 +55,9 @@
 <!-- Leaflet のスタイルとスクリプト -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- 画像圧縮用のスクリプト -->
+<script src="https://cdn.jsdelivr.net/npm/browser-image-compression@1.0.15/dist/browser-image-compression.js"></script>
 
 <!-- 地図スクリプト -->
 <script>
@@ -97,6 +107,32 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('longitude').value = latlng[1];
         marker = L.marker(latlng).addTo(map).bindPopup(name).openPopup();
     }
+
+    // 画像圧縮の処理
+    document.getElementById('images').addEventListener('change', async function (event) {
+        const files = event.target.files;
+        const compressedFiles = [];
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const options = {
+                maxSizeMB: 1,
+                maxWidthOrHeight: 1024,
+                useWebWorker: true
+            };
+            try {
+                const compressedFile = await imageCompression(file, options);
+                compressedFiles.push(compressedFile);
+            } catch (error) {
+                console.error('画像の圧縮に失敗しました:', error);
+            }
+        }
+
+        // 圧縮された画像をフォームデータに追加
+        const dataTransfer = new DataTransfer();
+        compressedFiles.forEach(file => dataTransfer.items.add(file));
+        document.getElementById('images').files = dataTransfer.files;
+    });
 });
 </script>
 

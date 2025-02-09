@@ -46,7 +46,7 @@ class PostController extends Controller
         $post = Post::create([
             'title' => $request->title,
             'description' => $request->description,
-            'location' => $request->location, 
+            'location' => $request->location,
             'latitude' => $request->latitude,
             'longitude' => $request->longitude,
             'user_id' => Auth::id(),
@@ -55,13 +55,15 @@ class PostController extends Controller
         // 画像を保存
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
-                $path = $image->store('images', 'public');
-                $post->images()->create(['image_path' => $path]);
+                $fileName = time() . '_' . $image->getClientOriginalName(); // 一意なファイル名
+                $image->move(public_path('images'), $fileName); // public/images に保存
+
+                $post->images()->create(['image_path' => $fileName]); // DBにはファイル名のみ保存
             }
         }
 
         return redirect()->route('posts.index')->with('success', '投稿が作成されました！');
-    }
+        }
 
     public function show(Post $post)
     {
