@@ -167,7 +167,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var map = L.map('map').setView([{{ $post->latitude ?? 35.6895 }}, {{ $post->longitude ?? 139.6917 }}], 14);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; OpenStreetMap contributors' }).addTo(map);
     L.marker([{{ $post->latitude ?? 35.6895 }}, {{ $post->longitude ?? 139.6917 }}]).addTo(map)
-        .bindPopup('<b>{{ $post->title }}</b><br>{{ $post->description }}').openPopup();
+        .bindPopup('<b>{{ $post->title }}</b>').openPopup();
 });
 </script>
 @endsection

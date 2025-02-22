@@ -90,7 +90,7 @@
             const images = [
                 '{{ asset("images/kyoto.jpg") }}',
                 '{{ asset("images/tokyo.jpg") }}',
-                '{{ asset("images/osaka.jpg") }}'
+                '{{ asset("images/osaka.jpg") }}',
             ];
             const randomImage = images[Math.floor(Math.random() * images.length)];
             document.body.style.backgroundImage = `url(${randomImage})`;

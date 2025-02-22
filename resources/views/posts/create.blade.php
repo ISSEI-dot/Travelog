@@ -22,6 +22,13 @@
                     <textarea name="description" id="description" class="form-control text-dark" rows="5" required></textarea>
                 </div>
 
+                <!-- 画像アップロード -->
+                <div class="mb-4">
+                    <label for="images" class="form-label text-white fw-bold">画像をアップロード</label>
+                    <input type="file" name="images[]" id="images" class="form-control text-dark" multiple required>
+                    <small class="text-light">※複数の画像を選択できます</small>
+                </div>
+
                 <!-- 観光地検索ボックス -->
                 <div class="mb-4 d-flex">
                     <input type="text" id="location-search" class="form-control text-dark me-2" placeholder="例: 東京タワー, 京都, 大阪城">

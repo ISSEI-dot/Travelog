@@ -55,7 +55,7 @@ class PostController extends Controller
         // 画像を保存
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
-                $path = $image->store('images', 'public');
+                $path = $image->store('', 'public');
                 $post->images()->create(['image_path' => $path]);
             }
         }
