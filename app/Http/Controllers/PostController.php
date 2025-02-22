@@ -52,13 +52,19 @@ class PostController extends Controller
             'user_id' => Auth::id(),
         ]);
 
-        // 画像を保存
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $image) {
-                $path = $image->store('images', 'public');
-                $post->images()->create(['image_path' => $path]);
+            // 画像を保存
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $image) {
+                    // public/images フォルダにそのまま保存
+                    $filename = $image->getClientOriginalName();
+                    $image->move(public_path('images'), $filename);
+
+                    // データベースにはファイル名のみを保存
+                    $post->images()->create(['image_path' => $filename]);
+                }
             }
-        }
+
+
 
         return redirect()->route('posts.index')->with('success', '投稿が作成されました！');
         }
